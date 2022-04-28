@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "request": "^2.88.2"
+  },
+  "name": "weather-app",
+  "version": "1.0.0",
+  "main": "app.js",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "production": "node app.js",
+    "development": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denizcankartal/weather-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/denizcankartal/weather-app/issues"
+  },
+  "homepage": "https://github.com/denizcankartal/weather-app#readme",
+  "description": ""
+}
