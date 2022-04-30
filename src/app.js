@@ -3,8 +3,13 @@ const path = require("path");
 const hbs = require("hbs");
 const { geocode } = require("./utils/geocode");
 const { weatherForecast } = require("./utils/weatherForecast");
+require("dotenv").config();
 
 const app = express();
+
+// API keys
+const weatherApiKey = process.env.WEATHER_API_KEY;
+const geocodingApiKey = process.env.GEOCODING_API_KEY;
 
 // define paths for express config
 const publicDirPath = path.join(__dirname, "../public");
@@ -27,10 +32,6 @@ app.get("", (request, response) => {
 });
 
 app.get("/weather", (request, response) => {
-  const weatherApiKey = "2c656efd0abc6d2a2d2c8c1f2ef38cb6";
-  const geocodingApiKey =
-    "pk.eyJ1IjoiY3liZXJsb3JkMTIiLCJhIjoiY2wyamF0NmxkMDFkMDNjbzhiYzJqMTJndCJ9.0YcWmPs0SKUzjSaD3ONWdw";
-
   if (!request.query.address) {
     response.send({
       error: "Please provide an address!",
