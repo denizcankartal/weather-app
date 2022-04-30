@@ -1,7 +1,8 @@
 const express = require("express");
 const path = require("path");
 const hbs = require("hbs");
-const { request } = require("http");
+const { geocode } = require("./utils/geocode");
+const { weatherForecast } = require("./utils/weatherForecast");
 
 const app = express();
 
@@ -25,55 +26,49 @@ app.get("", (request, response) => {
   }); // render the template
 });
 
-app.get("/about", (request, response) => {
-  response.render("about", {
-    title: "ABOUT",
-    img: "img/cat.png",
-    name: "Deniz",
-  }); // render the template
-});
-
-app.get("/help", (request, response) => {
-  response.render("help", {
-    title: "HELP",
-    message: "you cannot get any help here!",
-    name: "Deniz",
-  });
-});
-
 app.get("/weather", (request, response) => {
-  let jsonResponse;
+  const weatherApiKey = "2c656efd0abc6d2a2d2c8c1f2ef38cb6";
+  const geocodingApiKey =
+    "pk.eyJ1IjoiY3liZXJsb3JkMTIiLCJhIjoiY2wyamF0NmxkMDFkMDNjbzhiYzJqMTJndCJ9.0YcWmPs0SKUzjSaD3ONWdw";
+
   if (!request.query.address) {
-    jsonResponse = {
-      error: "Please provide an address!",
-    };
-  } else {
-    jsonResponse = {
-      address: request.query.address,
-    };
-  }
-  response.send(jsonResponse); // serving JSON, when the argument to the send method is an object, express directly stringifies that object to send the object as a JSON
-});
-
-app.get("/help/*", (request, response) => {
-  response.render("404", {
-    title: "Not Found",
-    errorMessage: "help article not found",
-    name: "Deniz",
-  });
-});
-
-app.get("/products", (request, response) => {
-  if (!request.query.search) {
     response.send({
-      error: "provide a search field",
-    });
+      error: "Please provide an address!",
+    }); // serving JSON, when the argument to the send method is an object, express directly stringifies that object to send the object as a JSON
     return;
   }
-  console.log(request.query);
+  geocode(
+    request.query.address,
+    geocodingApiKey,
+    (err, { longitude, latitude, location } = {}) => {
+      if (err) {
+        response.send({ error: err });
+        return;
+      }
+      weatherForecast(
+        weatherApiKey,
+        longitude,
+        latitude,
+        (err, temperature) => {
+          if (err) {
+            response.send({ error: err });
+            return;
+          }
+          response.send({
+            location: location,
+            temperature: temperature,
+          });
+        }
+      );
+    }
+  );
+});
 
-  response.send({
-    products: [],
+app.get("/weather/*", (request, response) => {
+  response.render("404", {
+    title: "Not Found",
+    errorMessage: "end point not found",
+    name: "Deniz",
   });
 });
 
@@ -85,6 +80,6 @@ app.get("*", (request, response) => {
     name: "Deniz",
   });
 });
-app.listen(3005, () => {
-  console.log("Server started to listen on port 3005");
+app.listen(3000, () => {
+  console.log("Server started to listen on port 3000");
 });
