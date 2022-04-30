@@ -1,9 +1,7 @@
-const { geocode } = require("./utils/geocode");
-const { weatherForecast } = require("./utils/weatherForecast");
+const { geocode } = require("./src/utils/geocode");
+const { weatherForecast } = require("./src/utils/weatherForecast");
 
 const weatherApiKey = "2c656efd0abc6d2a2d2c8c1f2ef38cb6";
-const temperatureUnit = "m";
-
 const geocodingApiKey =
   "pk.eyJ1IjoiY3liZXJsb3JkMTIiLCJhIjoiY2wyamF0NmxkMDFkMDNjbzhiYzJqMTJndCJ9.0YcWmPs0SKUzjSaD3ONWdw";
 
